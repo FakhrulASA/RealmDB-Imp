@@ -1,4 +1,4 @@
-package com.example.realmdb
+package com.fakhrulasa.realmdb
 
 import android.app.Application
 import io.realm.Realm
