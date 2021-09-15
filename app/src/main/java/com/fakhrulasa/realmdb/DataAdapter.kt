@@ -15,7 +15,7 @@ class DataAdapter(private val dataSet: MutableList<DataModel>) :
            val textID:TextView=view.findViewById(R.id.tvID)
     }
 
-
+    //viewholder
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataAdapter.DataViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.list_item, parent, false)
