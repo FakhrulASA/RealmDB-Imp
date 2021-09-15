@@ -1,24 +1,22 @@
 package com.example.realmdb
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Spinner
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import io.realm.Realm
 import io.realm.RealmConfiguration
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
     var realm: Realm? = null
-    private var output: TextView? = null
+    lateinit var adapter: DataAdapter
+    private lateinit var recyclerView: RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -27,12 +25,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             .allowWritesOnUiThread(true)
             .build()
         realm = Realm.getInstance(config)
+        recyclerView = findViewById(R.id.reyclerview123)
         var jobs: Job
         val insert = findViewById<Button>(R.id.insert)
         val update = findViewById<Button>(R.id.update)
         val read = findViewById<Button>(R.id.read)
         val delete = findViewById<Button>(R.id.delete)
-        output = findViewById(R.id.show_data)
+        showData()
         insert.setOnClickListener(this)
         update.setOnClickListener(this)
         read.setOnClickListener(this)
@@ -70,10 +69,23 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             val id = data_id.text.toString().toLong()
             val dataModel =
                 realm!!.where(DataModel::class.java).equalTo("id", id).findFirst()
-            showUpdateDialog(dataModel)
+            when {
+                dataModel != null -> {
+                    showUpdateDialog(dataModel)
+                }
+                else -> {
+                    Toast.makeText(
+                        this,
+                        "There is no data with ${id.toString()} id",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun showDeleteDialog() {
         val al = AlertDialog.Builder(this@MainActivity)
         val view = layoutInflater.inflate(R.layout.delete_dialog, null)
@@ -86,15 +98,23 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             val dataModel =
                 realm!!.where(DataModel::class.java).equalTo("id", id).findFirst()
             realm!!.executeTransaction {
-
-                alertDialog.dismiss()
-                dataModel!!.deleteFromRealm()
-
+                if (dataModel != null) {
+                    alertDialog.dismiss()
+                    dataModel.deleteFromRealm()
+                    adapter.notifyDataSetChanged()
+                } else {
+                    Toast.makeText(
+                        this,
+                        "There is no data with ${id.toString()} id",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
 
             }
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun showInsertDialog() {
         val al = AlertDialog.Builder(this@MainActivity)
         val view = layoutInflater.inflate(R.layout.data_input_dialog, null)
@@ -118,10 +138,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             dataModel.age = age.text.toString().toInt()
             dataModel.name = name.text.toString()
             dataModel.gender = gender.selectedItem.toString()
-            realm!!.executeTransactionAsync { realm -> realm.copyToRealm(dataModel) }
+            realm!!.executeTransaction { realm ->
+                realm.copyToRealm(dataModel)
+                adapter.notifyDataSetChanged()
+            }
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun showUpdateDialog(dataModel: DataModel?) {
         val al = AlertDialog.Builder(this@MainActivity)
         val view = layoutInflater.inflate(R.layout.data_input_dialog, null)
@@ -140,23 +164,20 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
         save.setOnClickListener {
             alertDialog.dismiss()
-                realm?.executeTransaction{
-                    dataModel.age = age.text.toString().toInt()
-                    dataModel.name = name.text.toString()
-                    dataModel.gender = gender.selectedItem.toString()
-                    it.copyToRealmOrUpdate(dataModel)
-                }
+
+            realm?.executeTransaction {
+                dataModel.age = age.text.toString().toInt()
+                dataModel.name = name.text.toString()
+                dataModel.gender = gender.selectedItem.toString()
+                it.copyToRealmOrUpdate(dataModel)
+                adapter.notifyDataSetChanged()
+            }
         }
     }
 
     private fun showData() {
-        val dataModels: List<DataModel> = realm!!.where(DataModel::class.java).findAll()
-        output!!.text = ""
-        for (i in dataModels.indices) {
-            output!!.append(
-                "ID : ${dataModels[i].id} Name : ${dataModels[i].name} Age : ${dataModels[i].age} Gender : ${dataModels[i].gender} \n "
-
-            )
-        }
+        val dataModels: MutableList<DataModel> = realm!!.where(DataModel::class.java).findAll()
+        adapter = DataAdapter(dataModels)
+        recyclerView.adapter = adapter
     }
 }

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_marginHorizontal="10dp"
+    android:padding="10dp"
+    android:background="#E0FFFC"
+    android:layout_marginVertical="5dp"
+    android:layout_height="wrap_content">
+
+
+    <TextView
+        android:id="@+id/tvID"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:textSize="20sp"
+        android:textColor="#00897B"
+        android:fontFamily="sans-serif-medium"
+        android:text="1" />
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="name"
+        android:textSize="20sp"
+        android:textColor="#404040"
+
+        android:fontFamily="sans-serif-medium"
+        android:layout_weight="1"
+        app:layout_constraintEnd_toStartOf="@+id/textView2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvAge"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:layout_weight="1"
+        android:textSize="20sp"
+        android:textAlignment="center"
+        android:textColor="#503581"
+        android:fontFamily="sans-serif-medium"
+        app:layout_constraintEnd_toStartOf="@+id/textView3"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvGender"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textSize="20sp"
+        android:textAlignment="textEnd"
+        android:textColor="#009688"
+        android:fontFamily="sans-serif-medium"
+        android:layout_weight="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteY="11dp" />
+</androidx.appcompat.widget.LinearLayoutCompat>

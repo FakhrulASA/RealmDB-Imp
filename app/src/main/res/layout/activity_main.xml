@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android" >
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <LinearLayout
         android:id="@+id/line1"
         android:orientation="horizontal"
@@ -35,10 +36,17 @@
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+
     </LinearLayout>
-    <TextView
-        android:id="@+id/show_data"
-        android:layout_below="@id/line1"
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/reyclerview123"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_below="@+id/line1"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:layout_marginTop="2dp"
+        android:layout_weight="1" />
+
+
 </RelativeLayout>
