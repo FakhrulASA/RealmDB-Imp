@@ -40,20 +40,20 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(v: View) {
         if (v.id == R.id.insert) {
-            Log.d("Insert", "Insert")
+            Log.d("clickMessage", "Insert")
             showInsertDialog()
         }
         if (v.id == R.id.update) {
             showUpdateDialog()
-            Log.d("Insert", "Insert")
+            Log.d("clickMessage", "update")
         }
         if (v.id == R.id.delete) {
-            Log.d("Insert", "Insert")
+            Log.d("clickMessage", "delete")
             showDeleteDialog()
         }
         if (v.id == R.id.read) {
             showData()
-            Log.d("Insert", "Insert")
+            Log.d("clickMessage", "read")
         }
     }
 
